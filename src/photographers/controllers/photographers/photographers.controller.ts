@@ -18,8 +18,8 @@ export class PhotographersController {
 
   @Post('create')
   @UsePipes(ValidationPipe)
-  createPhotographer(@Body() createPhotographerDto: CreatePhotographerDto) {
-    return this.photographersService.createPhotographer(createPhotographerDto);
+  createPhotographer(@Body() createPhotographer: CreatePhotographerDto) {
+    return this.photographersService.createPhotographer(createPhotographer);
   }
 
   @Get()
