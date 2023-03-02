@@ -19,6 +19,9 @@ async function bootstrap() {
 
   app.useGlobalPipes(new ValidationPipe());
 
+  const isInDevelopmentMode = process.env.NODE_ENV === 'development';
+  if (isInDevelopmentMode) app.enableCors();
+
   await app.listen(port);
 }
 bootstrap();
