@@ -24,13 +24,13 @@ export class Photographers {
   cpf: string;
 
   @Column({ nullable: false })
-  gender: string;
+  gender_id: number;
 
   @Column({ nullable: false })
   phone: string;
 
   @Column({ nullable: false })
-  zipcode: string;
+  zip_code: string;
 
   @Column({ nullable: false })
   state: string;
