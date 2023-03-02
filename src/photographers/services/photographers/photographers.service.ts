@@ -1,6 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Photographers } from 'src/entities';
+import { Gender } from 'src/enums/gender.enum';
 import { CreatePhotographerDto } from 'src/photographers/photographers.dtos';
 import { Repository } from 'typeorm';
 
@@ -12,7 +13,7 @@ export class PhotographersService {
   ) {}
 
   async createPhotographer(createPhotographerDto: CreatePhotographerDto) {
-    const { email, cpf } = createPhotographerDto;
+    const { email, cpf, gender_id } = createPhotographerDto;
 
     const isEmailRegistered = await this.photographerRepository.findOne({
       where: { email },
@@ -26,6 +27,12 @@ export class PhotographersService {
       return new BadRequestException(
         isEmailRegistered ? 'E-mail já cadastrado' : 'Cpf já cadastrado',
       );
+    }
+
+    const genders = [Gender.Male, Gender.Female];
+
+    if (!genders.includes(Number(gender_id))) {
+      return new BadRequestException('Genêro não cadastrado');
     }
 
     const currentDate = new Date();
