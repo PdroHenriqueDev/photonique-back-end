@@ -1,4 +1,10 @@
-import { IsEmail, IsNotEmpty, MinLength, Validate } from 'class-validator';
+import {
+  IsEmail,
+  IsNotEmpty,
+  IsNumberString,
+  MinLength,
+  Validate,
+} from 'class-validator';
 import { IsCpf } from '../validators/isCpf';
 import { ApiProperty } from '@nestjs/swagger';
 
@@ -27,8 +33,8 @@ export class CreatePhotographerDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: 'É necessário preencher o campo gênero' })
-  @MinLength(2)
-  gender: string;
+  @IsNumberString()
+  gender_id: number;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'É necessário preencher o telefone/celular' })
@@ -37,12 +43,12 @@ export class CreatePhotographerDto {
 
   @ApiProperty()
   @IsNotEmpty({ message: 'É necessário preencher o cep' })
-  @MinLength(5)
-  zipcode: string;
+  @MinLength(8)
+  zip_code: string;
 
   @ApiProperty()
   @IsNotEmpty({ message: 'É necessário preencher o Estado' })
-  @MinLength(5)
+  @MinLength(2)
   state: string;
 
   @ApiProperty()
