@@ -1,7 +1,8 @@
-import { Injectable, BadRequestException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Photographers } from 'src/entities';
 import { Gender } from 'src/enums/gender.enum';
+import { StandardResponse } from 'src/models/StandartResponse.model';
 import { CreatePhotographerDto } from 'src/photographers/photographers.dtos';
 import { Repository } from 'typeorm';
 
@@ -12,7 +13,9 @@ export class PhotographersService {
     private readonly photographerRepository: Repository<Photographers>,
   ) {}
 
-  async createPhotographer(createPhotographerDto: CreatePhotographerDto) {
+  async createPhotographer(
+    createPhotographerDto: CreatePhotographerDto,
+  ): Promise<StandardResponse<null>> {
     const { email, cpf, gender_id } = createPhotographerDto;
 
     const isEmailRegistered = await this.photographerRepository.findOne({
@@ -24,15 +27,21 @@ export class PhotographersService {
     });
 
     if (isEmailRegistered || isCpfRegistered) {
-      return new BadRequestException(
-        isEmailRegistered ? 'E-mail já cadastrado' : 'Cpf já cadastrado',
-      );
+      return {
+        statusCode: 400,
+        message: isEmailRegistered
+          ? 'E-mail já cadastrado'
+          : 'Cpf já cadastrado',
+      };
     }
 
     const genders = [Gender.Male, Gender.Female];
 
     if (!genders.includes(Number(gender_id))) {
-      return new BadRequestException('Genêro não cadastrado');
+      return {
+        statusCode: 400,
+        message: 'Genêro não cadastrado',
+      };
     }
 
     const currentDate = new Date();
@@ -42,8 +51,12 @@ export class PhotographersService {
       created_on: currentDate,
     };
 
-    const newPhotographer = this.photographerRepository.create(data);
-    return this.photographerRepository.save(newPhotographer);
+    await this.photographerRepository.save(data);
+
+    return {
+      statusCode: 201,
+      message: 'Fotógrafo cadastrado',
+    };
   }
 
   findPhotographers() {
