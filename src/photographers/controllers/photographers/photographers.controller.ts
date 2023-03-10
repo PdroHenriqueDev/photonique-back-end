@@ -5,9 +5,11 @@ import {
   Param,
   ParseIntPipe,
   Post,
+  Res,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { Response } from 'express';
 
 import { CreatePhotographerDto } from 'src/photographers/photographers.dtos';
 import { PhotographersService } from 'src/photographers/services/photographers/photographers.service';
@@ -18,8 +20,17 @@ export class PhotographersController {
 
   @Post('create')
   @UsePipes(ValidationPipe)
-  createPhotographer(@Body() createPhotographer: CreatePhotographerDto) {
-    return this.photographersService.createPhotographer(createPhotographer);
+  async createPhotographer(
+    @Body() createPhotographer: CreatePhotographerDto,
+    @Res() res: Response,
+  ) {
+    const serviceResponse = await this.photographersService.createPhotographer(
+      createPhotographer,
+    );
+
+    const { statusCode } = serviceResponse;
+
+    return res.status(statusCode).json(serviceResponse);
   }
 
   @Get()
