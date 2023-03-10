@@ -28,9 +28,9 @@ export class PhotographersController {
       createPhotographer,
     );
 
-    const { message, statusCode } = serviceResponse;
+    const { statusCode } = serviceResponse;
 
-    return res.status(statusCode).json(message);
+    return res.status(statusCode).json(serviceResponse);
   }
 
   @Get()
