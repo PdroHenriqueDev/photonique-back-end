@@ -60,4 +60,17 @@ export class CreatePhotographerDto {
   @IsNotEmpty({ message: 'É necessário preencher o endereço' })
   @MinLength(5, { message: 'Endereço precisa de mais detalhes' })
   address: string;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'É necessário preencher o logadouro' })
+  @MinLength(5, { message: 'Logadouro precisa de mais detalhes' })
+  neighborhood: string;
+
+  @ApiProperty()
+  @IsNotEmpty({ message: 'É necessário preencher o número' })
+  @MinLength(1, { message: 'Número inválido' })
+  address_number: string;
+
+  @ApiProperty()
+  address_complement: string;
 }

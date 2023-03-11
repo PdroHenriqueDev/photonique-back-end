@@ -40,4 +40,13 @@ export class Photographers {
 
   @Column({ nullable: false })
   address: string;
+
+  @Column({ nullable: false })
+  neighborhood: string;
+
+  @Column({ nullable: false })
+  address_number: string;
+
+  @Column()
+  address_complement: string;
 }
