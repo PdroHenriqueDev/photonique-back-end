@@ -9,11 +9,13 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 
-import { CreatePhotographerDto } from 'src/photographers/photographers.dtos';
+import { CreatePhotographerDto } from 'src/photographers/DTOs/photographers.dtos';
 import { PhotographersService } from 'src/photographers/services/photographers/photographers.service';
 
+@ApiTags('photographers')
 @Controller('photographers')
 export class PhotographersController {
   constructor(private readonly photographersService: PhotographersService) {}
