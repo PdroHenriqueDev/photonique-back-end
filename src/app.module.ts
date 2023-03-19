@@ -3,6 +3,7 @@ import { PhotographersModule } from './photographers/photographers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './database/connections';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { databaseConfig } from './database/connections';
       inject: [ConfigService],
     }),
     PhotographersModule,
+    AuthModule,
   ],
   controllers: [],
   providers: [],
