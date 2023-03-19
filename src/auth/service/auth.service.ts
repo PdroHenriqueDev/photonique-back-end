@@ -17,32 +17,35 @@ export class AuthService {
 
   async validatePhotographer(
     authPhotographerDto: AuthPhotographerDto,
-  ): Promise<AuthResponse> {
+  ): Promise<Photographers | null> {
     const { email, password } = authPhotographerDto;
 
     const photographer = await this.photographerRepository.findOne({
       where: { email },
     });
 
-    if (!photographer) {
-      return {
-        statusCode: 400,
-        message: 'Credenciais inválida',
-      };
-    }
+    if (!photographer) return null;
 
     const { password: passwordHash } = photographer;
 
     const passwordIsValid = await bcrypt.compare(password, passwordHash);
 
-    if (!passwordIsValid) {
+    if (!passwordIsValid) return null;
+
+    return photographer;
+  }
+
+  async login(authPhotographerDto: AuthPhotographerDto): Promise<AuthResponse> {
+    const photographer = await this.validatePhotographer(authPhotographerDto);
+
+    if (!photographer) {
       return {
         statusCode: 401,
-        message: 'Credenciais inválida',
+        message: 'Credenciais inválidas',
       };
     }
 
-    const { token } = await this.generateToken(email);
+    const { token } = await this.generateToken(authPhotographerDto);
 
     return {
       statusCode: 200,
@@ -51,17 +54,9 @@ export class AuthService {
     };
   }
 
-  async generateToken(email: string) {
-    const secret = process.env.JWT_SECRET;
-
+  async generateToken(authPhotographerDto: AuthPhotographerDto) {
     return {
-      token: this.jwtService.sign(
-        { email },
-        {
-          secret,
-          expiresIn: '50s',
-        },
-      ),
+      token: this.jwtService.sign(authPhotographerDto),
     };
   }
 }

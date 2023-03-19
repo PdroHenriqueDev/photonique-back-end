@@ -21,9 +21,7 @@ export class AuthController {
     @Body() authPhotographer: AuthPhotographerDto,
     @Res() res: Response,
   ) {
-    const serviceResponse = await this.authService.validatePhotographer(
-      authPhotographer,
-    );
+    const serviceResponse = await this.authService.login(authPhotographer);
 
     const { statusCode } = serviceResponse;
 
