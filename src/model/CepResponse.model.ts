@@ -1,8 +1,8 @@
 export interface CepResponse {
-  cep: string;
-  logradouro: string;
-  complemento: string;
-  bairro: string;
-  localidade: string;
-  uf: string;
+  zip_code: string;
+  address: string;
+  address_complement: string;
+  neighborhood: string;
+  city: string;
+  state: string;
 }

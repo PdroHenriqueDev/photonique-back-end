@@ -26,12 +26,12 @@ export class CepService {
             resp.data;
 
           return {
-            cep,
-            logradouro,
-            complemento,
-            bairro,
-            localidade,
-            uf,
+            zip_code: cep,
+            address: logradouro,
+            address_complement: complemento,
+            neighborhood: bairro,
+            city: localidade,
+            state: uf,
           };
         }),
         catchError(() => of({})),
