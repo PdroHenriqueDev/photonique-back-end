@@ -10,6 +10,10 @@ import { StandardResponse } from 'src/model/StandartResponse.model';
 export class CepService {
   constructor(private readonly httpService: HttpService) {}
   async getCepInfo(cep: string): Promise<StandardResponse<CepResponse | null>> {
+    cep = cep.replace(/\D/g, '');
+    const validcep = /^[0-9]{8}$/;
+    const isCepValid = validcep.test(cep);
+
     const request = this.httpService
       .get(`//viacep.com.br/ws/${cep}/json/`)
       .pipe(
@@ -17,7 +21,7 @@ export class CepService {
         catchError(() => of({})),
       );
 
-    const response = await lastValueFrom(request);
+    const response = isCepValid ? await lastValueFrom(request) : {};
 
     return {
       data: response,
