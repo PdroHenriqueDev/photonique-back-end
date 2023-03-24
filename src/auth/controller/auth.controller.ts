@@ -6,7 +6,7 @@ import {
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { AuthPhotographerDto } from 'src/photographers/DTOs/authPhotographer.dto';
+import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto';
 import { AuthService } from '../service/auth.service';
 import { Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';

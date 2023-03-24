@@ -2,8 +2,9 @@ import { Module } from '@nestjs/common';
 import { PhotographersModule } from './photographers/photographers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig } from './database/connections';
+import { databaseConfig } from './database/connection';
 import { AuthModule } from './auth/auth.module';
+import { CepController } from './cep/cep.controller';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { AuthModule } from './auth/auth.module';
     PhotographersModule,
     AuthModule,
   ],
-  controllers: [],
+  controllers: [CepController],
   providers: [],
 })
 export class AppModule {}

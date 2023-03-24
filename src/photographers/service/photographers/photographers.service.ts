@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Photographers } from 'src/entities';
+import { Photographers } from 'src/entity';
 import { Gender } from 'src/enums/gender.enum';
-import { StandardResponse } from 'src/models/StandartResponse.model';
-import { CreatePhotographerDto } from 'src/photographers/DTOs/photographers.dtos';
+import { StandardResponse } from 'src/model/StandartResponse.model';
+import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
