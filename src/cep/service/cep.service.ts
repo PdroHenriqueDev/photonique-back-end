@@ -12,13 +12,28 @@ export class CepService {
     private readonly httpService: HttpService,
     private isCep: IsCep,
   ) {}
-  async getCepInfo(cep: string): Promise<StandardResponse<CepResponse | null>> {
+  async getCepInfo(
+    cep: string,
+  ): Promise<StandardResponse<CepResponse | object>> {
     const isCepValid = this.isCep.validate(cep);
+    const cepFormatted = cep.replace(/\D/g, '');
 
     const request = this.httpService
-      .get(`//viacep.com.br/ws/${cep}/json/`)
+      .get(`//viacep.com.br/ws/${cepFormatted}/json/`)
       .pipe(
-        map((resp: AxiosResponse) => resp.data),
+        map((resp: AxiosResponse) => {
+          const { cep, logradouro, complemento, bairro, localidade, uf } =
+            resp.data;
+
+          return {
+            cep,
+            logradouro,
+            complemento,
+            bairro,
+            localidade,
+            uf,
+          };
+        }),
         catchError(() => of({})),
       );
 
