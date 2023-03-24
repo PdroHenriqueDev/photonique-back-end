@@ -5,14 +5,15 @@ import { lastValueFrom, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { CepResponse } from 'src/model/CepResponse.model';
 import { StandardResponse } from 'src/model/StandartResponse.model';
-
+import { IsCep } from 'src/validator/cepIsValid';
 @Injectable()
 export class CepService {
-  constructor(private readonly httpService: HttpService) {}
+  constructor(
+    private readonly httpService: HttpService,
+    private isCep: IsCep,
+  ) {}
   async getCepInfo(cep: string): Promise<StandardResponse<CepResponse | null>> {
-    cep = cep.replace(/\D/g, '');
-    const validcep = /^[0-9]{8}$/;
-    const isCepValid = validcep.test(cep);
+    const isCepValid = this.isCep.validate(cep);
 
     const request = this.httpService
       .get(`//viacep.com.br/ws/${cep}/json/`)

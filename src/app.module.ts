@@ -8,6 +8,7 @@ import { CepService } from './cep/service/cep.service';
 import { CepController } from './cep/controller/cep.controller';
 import { CepModule } from './cep/cep.module';
 import { HttpModule } from '@nestjs/axios/dist/http.module';
+import { IsCep } from './validator/cepIsValid';
 
 @Module({
   imports: [
@@ -24,6 +25,6 @@ import { HttpModule } from '@nestjs/axios/dist/http.module';
     HttpModule,
   ],
   controllers: [CepController],
-  providers: [CepService],
+  providers: [CepService, IsCep],
 })
 export class AppModule {}
