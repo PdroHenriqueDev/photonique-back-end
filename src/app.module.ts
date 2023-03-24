@@ -4,7 +4,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { databaseConfig } from './database/connection';
 import { AuthModule } from './auth/auth.module';
-import { CepController } from './cep/cep.controller';
+import { CepService } from './cep/service/cep.service';
+import { CepController } from './cep/controller/cep.controller';
+import { CepModule } from './cep/cep.module';
+import { HttpModule } from '@nestjs/axios/dist/http.module';
 
 @Module({
   imports: [
@@ -17,8 +20,10 @@ import { CepController } from './cep/cep.controller';
     }),
     PhotographersModule,
     AuthModule,
+    CepModule,
+    HttpModule,
   ],
   controllers: [CepController],
-  providers: [],
+  providers: [CepService],
 })
 export class AppModule {}

@@ -5,7 +5,7 @@ import {
   MinLength,
   Validate,
 } from 'class-validator';
-import { IsCpf } from '../../validators/isCpf';
+import { IsCpf } from '../../validator/isCpf';
 import { ApiProperty } from '@nestjs/swagger';
 
 export class CreatePhotographerDto {

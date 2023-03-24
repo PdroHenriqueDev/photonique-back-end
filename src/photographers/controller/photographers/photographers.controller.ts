@@ -15,7 +15,7 @@ import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
-import { PhotographersService } from 'src/photographers/services/photographers/photographers.service';
+import { PhotographersService } from 'src/photographers/service/photographers/photographers.service';
 
 @ApiTags('photographers')
 @Controller('photographers')
