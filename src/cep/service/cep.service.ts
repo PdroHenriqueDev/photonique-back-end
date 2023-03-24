@@ -21,9 +21,12 @@ export class CepService {
     const request = this.httpService
       .get(`//viacep.com.br/ws/${cepFormatted}/json/`)
       .pipe(
-        map((resp: AxiosResponse) => {
+        map((res: AxiosResponse) => {
           const { cep, logradouro, complemento, bairro, localidade, uf } =
-            resp.data;
+            res.data;
+
+          const { erro } = res.data;
+          if (erro) return {};
 
           return {
             zip_code: cep,
