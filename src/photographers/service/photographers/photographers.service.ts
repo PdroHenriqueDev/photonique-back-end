@@ -32,15 +32,16 @@ export class PhotographersService {
     } = createPhotographerDto;
     const salt = await bcrypt.genSalt();
 
-    const isEmailRegistered = await this.photographerRepository.findOne({
-      where: { email },
-    });
-
-    const cpfHash = await bcrypt.hash(cpf, salt);
-
-    const isCpfRegistered = await this.photographerRepository.findOne({
-      where: { cpf: cpfHash },
-    });
+    const [isEmailRegistered, isCpfRegistered] = await Promise.all([
+      this.photographerRepository.findOne({
+        where: { email },
+      }),
+      this.photographerRepository.findOne({
+        where: {
+          cpf,
+        },
+      }),
+    ]);
 
     if (isEmailRegistered || isCpfRegistered) {
       return {
@@ -84,7 +85,6 @@ export class PhotographersService {
 
     const data = {
       ...createPhotographerDto,
-      cpf: cpfHash,
       phone: phoneHash,
       zip_code: zipCodeHash,
       state: stateHash,
