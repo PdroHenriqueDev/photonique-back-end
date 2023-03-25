@@ -48,7 +48,7 @@ export class PhotographersService {
         statusCode: 400,
         message: isEmailRegistered
           ? 'E-mail já cadastrado'
-          : 'Cpf já cadastrado',
+          : 'CPF já cadastrado',
       };
     }
 
