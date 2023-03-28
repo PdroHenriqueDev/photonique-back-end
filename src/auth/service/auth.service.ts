@@ -1,11 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Photographers } from 'src/entities';
-import { AuthPhotographerDto } from 'src/photographers/DTOs/authPhotographer.dto';
+import { Photographers } from 'src/entity';
+import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { AuthResponse } from 'src/models/AuthResponse.model';
+import { AuthResponse } from 'src/model/AuthResponse.model';
 
 @Injectable()
 export class AuthService {

@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Photographers } from 'src/entities';
-import { Gender } from 'src/enums/gender.enum';
-import { StandardResponse } from 'src/models/StandartResponse.model';
-import { CreatePhotographerDto } from 'src/photographers/DTOs/photographers.dtos';
+import { Photographers } from 'src/entity';
+import { Gender } from 'src/enum/gender.enum';
+import { StandardResponse } from 'src/model/StandartResponse.model';
+import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
@@ -32,22 +32,23 @@ export class PhotographersService {
     } = createPhotographerDto;
     const salt = await bcrypt.genSalt();
 
-    const isEmailRegistered = await this.photographerRepository.findOne({
-      where: { email },
-    });
-
-    const cpfHash = await bcrypt.hash(cpf, salt);
-
-    const isCpfRegistered = await this.photographerRepository.findOne({
-      where: { cpf: cpfHash },
-    });
+    const [isEmailRegistered, isCpfRegistered] = await Promise.all([
+      this.photographerRepository.findOne({
+        where: { email },
+      }),
+      this.photographerRepository.findOne({
+        where: {
+          cpf,
+        },
+      }),
+    ]);
 
     if (isEmailRegistered || isCpfRegistered) {
       return {
         statusCode: 400,
         message: isEmailRegistered
           ? 'E-mail já cadastrado'
-          : 'Cpf já cadastrado',
+          : 'CPF já cadastrado',
       };
     }
 
@@ -84,7 +85,6 @@ export class PhotographersService {
 
     const data = {
       ...createPhotographerDto,
-      cpf: cpfHash,
       phone: phoneHash,
       zip_code: zipCodeHash,
       state: stateHash,

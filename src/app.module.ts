@@ -2,8 +2,13 @@ import { Module } from '@nestjs/common';
 import { PhotographersModule } from './photographers/photographers.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { databaseConfig } from './database/connections';
+import { databaseConfig } from './database/connection';
 import { AuthModule } from './auth/auth.module';
+import { CepService } from './cep/service/cep.service';
+import { CepController } from './cep/controller/cep.controller';
+import { CepModule } from './cep/cep.module';
+import { HttpModule } from '@nestjs/axios/dist/http.module';
+import { IsCep } from './validator/cepIsValid';
 
 @Module({
   imports: [
@@ -16,8 +21,10 @@ import { AuthModule } from './auth/auth.module';
     }),
     PhotographersModule,
     AuthModule,
+    CepModule,
+    HttpModule,
   ],
-  controllers: [],
-  providers: [],
+  controllers: [CepController],
+  providers: [CepService, IsCep],
 })
 export class AppModule {}

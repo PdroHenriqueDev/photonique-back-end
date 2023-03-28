@@ -1,6 +1,6 @@
 import { ConfigService } from '@nestjs/config';
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
-import entities from '../entities';
+import entities from '../entity';
 
 export const databaseConfig = (
   configService: ConfigService,

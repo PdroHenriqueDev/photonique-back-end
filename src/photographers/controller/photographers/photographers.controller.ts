@@ -14,8 +14,8 @@ import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
-import { CreatePhotographerDto } from 'src/photographers/DTOs/photographers.dtos';
-import { PhotographersService } from 'src/photographers/services/photographers/photographers.service';
+import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
+import { PhotographersService } from 'src/photographers/service/photographers/photographers.service';
 
 @ApiTags('photographers')
 @Controller('photographers')
