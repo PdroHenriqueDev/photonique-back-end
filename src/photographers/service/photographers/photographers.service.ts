@@ -6,12 +6,14 @@ import { StandardResponse } from 'src/model/StandartResponse.model';
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { FileValidationPipe } from 'src/pipe/fileValidation.pipe';
 
 @Injectable()
 export class PhotographersService {
   constructor(
     @InjectRepository(Photographers)
     private readonly photographerRepository: Repository<Photographers>,
+    private fileValidationPipe: FileValidationPipe,
   ) {}
 
   async createPhotographer(
@@ -110,5 +112,17 @@ export class PhotographersService {
 
   findPhotographerById(id: number) {
     return this.photographerRepository.findOne({ where: { id } });
+  }
+
+  uploadPhoto(file: Express.Multer.File) {
+    console.log(file);
+    const validatorMessage = this.fileValidationPipe.transform(file);
+
+    if (validatorMessage) return validatorMessage;
+
+    return {
+      statusCode: 200,
+      message: 'Foto enviada com sucesso!',
+    };
   }
 }

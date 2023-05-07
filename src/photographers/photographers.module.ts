@@ -3,10 +3,11 @@ import { PhotographersController } from './controller/photographers/photographer
 import { PhotographersService } from './service/photographers/photographers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Photographers } from 'src/entity';
+import { FileValidationPipe } from 'src/pipe/fileValidation.pipe';
 
 @Module({
   controllers: [PhotographersController],
-  providers: [PhotographersService],
+  providers: [PhotographersService, FileValidationPipe],
   imports: [TypeOrmModule.forFeature([Photographers])],
 })
 export class PhotographersModule {}
