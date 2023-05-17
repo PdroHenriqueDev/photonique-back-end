@@ -17,6 +17,7 @@ import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
 import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { EventDto } from 'src/photographers/DTO/event.dto';
 import { FileUploadDto } from 'src/photographers/DTO/fileUpload.dto';
 
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
@@ -74,5 +75,17 @@ export class PhotographersController {
     file: Express.Multer.File,
   ) {
     return this.photographersService.uploadPhoto(file);
+  }
+
+  @Post('event')
+  @UsePipes(ValidationPipe)
+  async createEvent(@Body() createEvent: EventDto, @Res() res: Response) {
+    const serviceResponse = await this.photographersService.createEvet(
+      createEvent,
+    );
+
+    const { statusCode } = serviceResponse;
+
+    return res.status(statusCode).json(serviceResponse);
   }
 }

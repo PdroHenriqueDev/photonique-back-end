@@ -21,10 +21,10 @@ export class Events {
 
   @ManyToOne(() => Categories)
   @JoinColumn({ name: 'category_id', referencedColumnName: 'id' })
-  category_id: string;
+  category_id: number;
 
   @Column({ nullable: false })
-  state: number;
+  state: string;
 
   @Column({ nullable: false })
   city: string;
