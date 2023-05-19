@@ -3,7 +3,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Photographers } from 'src/entity';
 import { Events } from 'src/entity';
 import { Gender } from 'src/enum/gender.enum';
-import { StandardResponse } from 'src/model/StandartResponse.model';
+import { StandardResponse } from 'src/interfaces/StandartResponse';
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';

@@ -3,8 +3,8 @@ import { Injectable } from '@nestjs/common';
 import { AxiosResponse } from 'axios';
 import { lastValueFrom, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
-import { CepResponse } from 'src/model/CepResponse.model';
-import { StandardResponse } from 'src/model/StandartResponse.model';
+import { CepResponse } from 'src/interface/CepResponse';
+import { StandardResponse } from 'src/interface/StandartResponse';
 import { IsCep } from 'src/validator/cepIsValid';
 @Injectable()
 export class CepService {

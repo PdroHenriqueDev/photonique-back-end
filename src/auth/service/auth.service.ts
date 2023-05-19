@@ -5,7 +5,7 @@ import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto'
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
-import { AuthResponse } from 'src/model/AuthResponse.model';
+import { AuthResponse } from 'src/interface/AuthResponse';
 
 @Injectable()
 export class AuthService {
