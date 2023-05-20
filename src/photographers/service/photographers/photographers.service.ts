@@ -3,12 +3,12 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Photographers } from 'src/entity';
 import { Events } from 'src/entity';
 import { Gender } from 'src/enum/gender.enum';
-import { StandardResponse } from 'src/interfaces/StandartResponse';
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { FileValidationPipe } from 'src/pipe/fileValidation.pipe';
 import { EventDto } from 'src/photographers/DTO/event.dto';
+import { StandardResponse } from 'src/interface/StandartResponse';
 
 @Injectable()
 export class PhotographersService {
