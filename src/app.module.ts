@@ -9,6 +9,7 @@ import { CepController } from './cep/controller/cep.controller';
 import { CepModule } from './cep/cep.module';
 import { HttpModule } from '@nestjs/axios/dist/http.module';
 import { IsCep } from './validator/cepIsValid';
+import { StaticDataModule } from './static-data/static-data.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import { IsCep } from './validator/cepIsValid';
     AuthModule,
     CepModule,
     HttpModule,
+    StaticDataModule,
   ],
   controllers: [CepController],
   providers: [CepService, IsCep],

@@ -6,13 +6,19 @@ import {
   ParseIntPipe,
   Post,
   Res,
+  UploadedFile,
   UseGuards,
+  UseInterceptors,
   UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
 import { Response } from 'express';
+import { diskStorage } from 'multer';
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { EventDto } from 'src/photographers/DTO/event.dto';
+import { FileUploadDto } from 'src/photographers/DTO/fileUpload.dto';
 
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { PhotographersService } from 'src/photographers/service/photographers/photographers.service';
@@ -49,5 +55,37 @@ export class PhotographersController {
   @Get(':id')
   findPhotographerById(@Param('id', ParseIntPipe) id: number) {
     return this.photographersService.findPhotographerById(id);
+  }
+
+  @Post('photo/upload')
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload photo',
+    type: FileUploadDto,
+  })
+  @UseInterceptors(
+    FileInterceptor('file', {
+      storage: diskStorage({
+        destination: './files',
+      }),
+    }),
+  )
+  uploadFile(
+    @UploadedFile()
+    file: Express.Multer.File,
+  ) {
+    return this.photographersService.uploadPhoto(file);
+  }
+
+  @Post('event')
+  @UsePipes(ValidationPipe)
+  async createEvent(@Body() createEvent: EventDto, @Res() res: Response) {
+    const serviceResponse = await this.photographersService.createEvet(
+      createEvent,
+    );
+
+    const { statusCode } = serviceResponse;
+
+    return res.status(statusCode).json(serviceResponse);
   }
 }

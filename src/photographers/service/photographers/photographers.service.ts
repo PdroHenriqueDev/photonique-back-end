@@ -1,17 +1,23 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Photographers } from 'src/entity';
+import { Events } from 'src/entity';
 import { Gender } from 'src/enum/gender.enum';
-import { StandardResponse } from 'src/model/StandartResponse.model';
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
+import { FileValidationPipe } from 'src/pipe/fileValidation.pipe';
+import { EventDto } from 'src/photographers/DTO/event.dto';
+import { StandardResponse } from 'src/interface/StandartResponse';
 
 @Injectable()
 export class PhotographersService {
   constructor(
     @InjectRepository(Photographers)
     private readonly photographerRepository: Repository<Photographers>,
+    @InjectRepository(Events)
+    private readonly eventRepository: Repository<Events>,
+    private fileValidationPipe: FileValidationPipe,
   ) {}
 
   async createPhotographer(
@@ -110,5 +116,29 @@ export class PhotographersService {
 
   findPhotographerById(id: number) {
     return this.photographerRepository.findOne({ where: { id } });
+  }
+
+  async createEvet(event: EventDto): Promise<StandardResponse<null>> {
+    const newEvent = {
+      ...event,
+    };
+
+    await this.eventRepository.save(newEvent);
+
+    return {
+      statusCode: 200,
+      message: 'Evento criado com sucesso!',
+    };
+  }
+
+  uploadPhoto(file: Express.Multer.File) {
+    const validatorMessage = this.fileValidationPipe.transform(file);
+
+    if (validatorMessage) return validatorMessage;
+
+    return {
+      statusCode: 200,
+      message: 'Foto enviada com sucesso!',
+    };
   }
 }
