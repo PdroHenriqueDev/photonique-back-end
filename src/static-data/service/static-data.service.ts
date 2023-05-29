@@ -12,7 +12,7 @@ export class StaticDataService {
     private readonly categoriesRepository: Repository<Categories>,
   ) {}
 
-  async findAll(): Promise<StandardResponse<CategoryProps[]>> {
+  async findAllCategories(): Promise<StandardResponse<CategoryProps[]>> {
     const data = await this.categoriesRepository.find();
     return {
       data,
