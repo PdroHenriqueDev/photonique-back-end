@@ -5,6 +5,8 @@ import {
   Res,
   UsePipes,
   ValidationPipe,
+  Headers,
+  Get,
 } from '@nestjs/common';
 import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto';
 import { AuthService } from '../service/auth.service';
@@ -26,5 +28,17 @@ export class AuthController {
     const { statusCode } = serviceResponse;
 
     return res.status(statusCode).json(serviceResponse);
+  }
+
+  @Get('verify-token')
+  verifyToken(
+    @Headers('authorization') authorization: string,
+    @Res() res: Response,
+  ) {
+    const [, token] = authorization?.length > 0 ? authorization.split(' ') : '';
+    const serviceResponse = this.authService.verifyToken(token);
+    const { statusCode, data } = serviceResponse;
+
+    return res.status(statusCode).json(data);
   }
 }
