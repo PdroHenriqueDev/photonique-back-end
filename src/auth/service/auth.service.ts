@@ -6,6 +6,7 @@ import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponse } from 'src/interface/AuthResponse';
+import { StandardResponse } from 'src/interface/StandartResponse';
 
 @Injectable()
 export class AuthService {
@@ -47,10 +48,20 @@ export class AuthService {
 
     const { token } = await this.generateToken(authPhotographerDto);
 
+    const { name, email } = photographer;
+
+    const user = {
+      name,
+      email,
+    };
+
     return {
       statusCode: 200,
       message: 'Seja bem-vindo',
-      token,
+      data: {
+        token,
+        user,
+      },
     };
   }
 
@@ -58,5 +69,30 @@ export class AuthService {
     return {
       token: this.jwtService.sign(authPhotographerDto),
     };
+  }
+
+  verifyToken(token: string): StandardResponse<string> {
+    if (!token) {
+      return {
+        statusCode: 401,
+        message: 'Não autorizado',
+        data: 'Token inválido',
+      };
+    }
+
+    try {
+      this.jwtService.verify(token);
+      return {
+        statusCode: 200,
+        message: 'Seja bem-vindo',
+        data: 'Token válido',
+      };
+    } catch (error) {
+      return {
+        statusCode: 401,
+        message: 'Não autorizado',
+        data: 'Token inválido',
+      };
+    }
   }
 }

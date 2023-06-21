@@ -77,6 +77,7 @@ export class PhotographersController {
     return this.photographersService.uploadPhoto(file);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('event')
   @UsePipes(ValidationPipe)
   async createEvent(@Body() createEvent: EventDto, @Res() res: Response) {
