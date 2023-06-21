@@ -1,4 +1,5 @@
 import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Exclude } from 'class-transformer';
 
 @Entity()
 export class Photographers {
@@ -18,6 +19,7 @@ export class Photographers {
   email: string;
 
   @Column({ nullable: false })
+  @Exclude()
   password: string;
 
   @Column({ nullable: false })
@@ -49,4 +51,8 @@ export class Photographers {
 
   @Column()
   address_complement: string;
+
+  constructor(partial: Partial<Photographers>) {
+    Object.assign(this, partial);
+  }
 }

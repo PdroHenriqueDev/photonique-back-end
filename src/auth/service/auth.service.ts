@@ -48,10 +48,20 @@ export class AuthService {
 
     const { token } = await this.generateToken(authPhotographerDto);
 
+    const { name, email } = photographer;
+
+    const user = {
+      name,
+      email,
+    };
+
     return {
       statusCode: 200,
       message: 'Seja bem-vindo',
-      token,
+      data: {
+        token,
+        user,
+      },
     };
   }
 
