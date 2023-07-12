@@ -118,16 +118,22 @@ export class PhotographersService {
     return this.photographerRepository.findOne({ where: { id } });
   }
 
-  async createEvet(event: EventDto): Promise<StandardResponse<null>> {
+  async createEvet(
+    event: EventDto,
+  ): Promise<StandardResponse<{ eventId: number }>> {
     const newEvent = {
       ...event,
     };
 
-    await this.eventRepository.save(newEvent);
+    const savedNewEvent = await this.eventRepository.save(newEvent);
+    const { id } = savedNewEvent;
 
     return {
-      statusCode: 200,
+      statusCode: 201,
       message: 'Evento criado com sucesso!',
+      data: {
+        eventId: id,
+      },
     };
   }
 
