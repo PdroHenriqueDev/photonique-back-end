@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Photographers } from 'src/entity';
+import { People } from 'src/entity';
 import { Events } from 'src/entity';
 import { Gender } from 'src/enum/gender.enum';
 import { CreatePhotographerDto } from 'src/photographers/DTO/photographers.dtos';
@@ -13,8 +13,8 @@ import { StandardResponse } from 'src/interface/StandartResponse';
 @Injectable()
 export class PhotographersService {
   constructor(
-    @InjectRepository(Photographers)
-    private readonly photographerRepository: Repository<Photographers>,
+    @InjectRepository(People)
+    private readonly photographerRepository: Repository<People>,
     @InjectRepository(Events)
     private readonly eventRepository: Repository<Events>,
     private fileValidationPipe: FileValidationPipe,

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Photographers } from 'src/entity';
+import { People } from 'src/entity';
 import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
@@ -11,14 +11,14 @@ import { StandardResponse } from 'src/interface/StandartResponse';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(Photographers)
-    private readonly photographerRepository: Repository<Photographers>,
+    @InjectRepository(People)
+    private readonly photographerRepository: Repository<People>,
     private jwtService: JwtService,
   ) {}
 
   async validatePhotographer(
     authPhotographerDto: AuthPhotographerDto,
-  ): Promise<Photographers | null> {
+  ): Promise<People | null> {
     const { email, password } = authPhotographerDto;
 
     const photographer = await this.photographerRepository.findOne({

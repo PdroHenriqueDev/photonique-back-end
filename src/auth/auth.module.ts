@@ -4,7 +4,7 @@ import { PassportModule } from '@nestjs/passport';
 import { AuthService } from './service/auth.service';
 import { AuthController } from './controller/auth.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Photographers } from 'src/entity/photographer.entity';
+import { People } from 'src/entity/people.entity';
 import { JwtStrategy } from './jwt-strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 
@@ -12,7 +12,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   imports: [
-    TypeOrmModule.forFeature([Photographers]),
+    TypeOrmModule.forFeature([People]),
     PassportModule,
     ConfigModule,
     JwtModule.registerAsync({
