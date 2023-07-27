@@ -13,4 +13,8 @@ export class Roles {
     type: 'timestamp',
   })
   created_on: Date;
+
+  constructor(partial: Partial<Roles>) {
+    Object.assign(this, partial);
+  }
 }

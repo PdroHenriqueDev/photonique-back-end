@@ -7,6 +7,7 @@ import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponse } from 'src/interface/AuthResponse';
 import { StandardResponse } from 'src/interface/StandartResponse';
+import { RoleEnum } from 'src/enum/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -22,7 +23,7 @@ export class AuthService {
     const { email, password } = authPhotographerDto;
 
     const photographer = await this.photographerRepository.findOne({
-      where: { email },
+      where: { email, role_id: RoleEnum.Photographer },
     });
 
     if (!photographer) return null;

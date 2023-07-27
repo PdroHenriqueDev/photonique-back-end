@@ -2,7 +2,7 @@ import {
   Column,
   Entity,
   JoinColumn,
-  OneToMany,
+  ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
@@ -59,7 +59,7 @@ export class People {
   @Column()
   address_complement: string;
 
-  @OneToMany(() => Roles, (role) => role.id)
+  @ManyToOne(() => Roles, (roles) => roles.id)
   @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
   role_id: number;
 

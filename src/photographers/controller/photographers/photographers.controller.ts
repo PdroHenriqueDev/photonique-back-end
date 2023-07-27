@@ -78,6 +78,7 @@ export class PhotographersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post('event')
   @UsePipes(ValidationPipe)
   async createEvent(@Body() createEvent: EventDto, @Res() res: Response) {

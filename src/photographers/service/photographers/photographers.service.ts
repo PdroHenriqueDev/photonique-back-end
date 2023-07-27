@@ -9,6 +9,7 @@ import * as bcrypt from 'bcrypt';
 import { FileValidationPipe } from 'src/pipe/fileValidation.pipe';
 import { EventDto } from 'src/photographers/DTO/event.dto';
 import { StandardResponse } from 'src/interface/StandartResponse';
+import { RoleEnum } from 'src/enum/role.enum';
 
 @Injectable()
 export class PhotographersService {
@@ -100,6 +101,7 @@ export class PhotographersService {
       address_number: addressNumberHash,
       password: passwordHash,
       created_on: currentDate,
+      role_id: RoleEnum.Photographer,
     };
 
     await this.photographerRepository.save(data);
