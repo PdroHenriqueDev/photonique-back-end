@@ -47,9 +47,14 @@ export class AuthService {
       };
     }
 
-    const { token } = await this.generateToken(authPhotographerDto);
+    const { id, name, email } = photographer;
 
-    const { name, email } = photographer;
+    const photographerToGenerateToken = {
+      id,
+      email,
+    };
+
+    const { token } = await this.generateToken(photographerToGenerateToken);
 
     const user = {
       name,
@@ -66,9 +71,12 @@ export class AuthService {
     };
   }
 
-  async generateToken(authPhotographerDto: AuthPhotographerDto) {
+  async generateToken(photographerToGenerateToken: {
+    id: number;
+    email: string;
+  }) {
     return {
-      token: this.jwtService.sign(authPhotographerDto),
+      token: this.jwtService.sign(photographerToGenerateToken),
     };
   }
 
