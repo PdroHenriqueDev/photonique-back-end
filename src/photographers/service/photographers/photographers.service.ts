@@ -10,6 +10,7 @@ import { FileValidationPipe } from 'src/pipe/fileValidation.pipe';
 import { EventDto } from 'src/photographers/DTO/event.dto';
 import { StandardResponse } from 'src/interface/StandartResponse';
 import { RoleEnum } from 'src/enum/role.enum';
+import { AuthService } from 'src/auth/service/auth.service';
 
 @Injectable()
 export class PhotographersService {
@@ -19,6 +20,7 @@ export class PhotographersService {
     @InjectRepository(Events)
     private readonly eventRepository: Repository<Events>,
     private fileValidationPipe: FileValidationPipe,
+    private readonly authService: AuthService,
   ) {}
 
   async createPhotographer(
@@ -122,9 +124,20 @@ export class PhotographersService {
 
   async createEvet(
     event: EventDto,
+    authorizationToken: string,
   ): Promise<StandardResponse<{ eventId: number }>> {
+    const photographer = await this.findPhotographerByToken(authorizationToken);
+
+    if (!photographer) {
+      return {
+        statusCode: 400,
+        message: 'Fotógrafo não encontrado!',
+      };
+    }
+
     const newEvent = {
       ...event,
+      photographer_id: photographer.id,
     };
 
     const savedNewEvent = await this.eventRepository.save(newEvent);
@@ -148,5 +161,24 @@ export class PhotographersService {
       statusCode: 200,
       message: 'Foto enviada com sucesso!',
     };
+  }
+
+  async findPhotographerByToken(authorization: string) {
+    const [, token] = authorization?.length > 0 ? authorization.split(' ') : '';
+
+    const serviceResponse = await this.authService.verifyToken(token);
+    const { statusCode } = serviceResponse;
+    if (statusCode === 401) return null;
+
+    const decodedToken: any = this.authService.decodeToken(token);
+
+    const { id } = decodedToken;
+
+    if (!id) return null;
+    const photographer = await this.findPhotographerById(id);
+
+    if (!photographer) return null;
+
+    return photographer;
   }
 }

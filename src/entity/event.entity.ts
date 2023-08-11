@@ -34,7 +34,7 @@ export class Events {
 
   created_on: Date;
 
-  @ManyToOne(() => People)
+  @ManyToOne(() => People, { nullable: false })
   @JoinColumn({ name: 'photographer_id', referencedColumnName: 'id' })
   photographer_id: number;
 }

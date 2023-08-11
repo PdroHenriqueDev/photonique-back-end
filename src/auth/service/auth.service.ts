@@ -80,7 +80,7 @@ export class AuthService {
     };
   }
 
-  verifyToken(token: string): StandardResponse<string> {
+  async verifyToken(token: string): Promise<StandardResponse<string>> {
     if (!token) {
       return {
         statusCode: 401,
@@ -90,7 +90,7 @@ export class AuthService {
     }
 
     try {
-      this.jwtService.verify(token);
+      await this.jwtService.verify(token);
       return {
         statusCode: 200,
         message: 'Seja bem-vindo',
@@ -103,5 +103,21 @@ export class AuthService {
         data: 'Token inválido',
       };
     }
+  }
+
+  decodeToken(token: string) {
+    const decodedToken = this.jwtService.decode(token);
+
+    return decodedToken;
+  }
+
+  async findPersonById(id: number) {
+    const personsExists = await this.photographerRepository.findOne({
+      where: { id },
+    });
+
+    if (!personsExists) return false;
+
+    return true;
   }
 }
