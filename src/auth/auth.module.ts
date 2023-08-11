@@ -7,11 +7,13 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { People } from 'src/entity/people.entity';
 import { JwtStrategy } from './jwt-strategy';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { PhotographersModule } from 'src/photographers/photographers.module';
 
 @Module({
   providers: [AuthService, JwtStrategy],
   controllers: [AuthController],
   imports: [
+    PhotographersModule,
     TypeOrmModule.forFeature([People]),
     PassportModule,
     ConfigModule,
@@ -24,5 +26,6 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       inject: [ConfigService],
     }),
   ],
+  exports: [AuthService],
 })
 export class AuthModule {}

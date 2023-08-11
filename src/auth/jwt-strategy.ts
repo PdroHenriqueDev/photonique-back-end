@@ -5,7 +5,7 @@ import { AuthService } from './service/auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService) {
+  constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -13,11 +13,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  validate(token: string) {
-    const isValid = this.authService.verifyToken(token);
-    if (!isValid) {
+  async validate(tokenInfo: { id: number; email: string }) {
+    const { id } = tokenInfo;
+
+    const photographerExists = await this.authService.findPersonById(id);
+
+    if (!photographerExists) {
       throw new UnauthorizedException();
     }
-    return isValid;
+    return photographerExists;
   }
 }
