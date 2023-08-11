@@ -11,6 +11,7 @@ import {
   UseInterceptors,
   UsePipes,
   ValidationPipe,
+  Headers,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ApiBearerAuth, ApiBody, ApiConsumes, ApiTags } from '@nestjs/swagger';
@@ -78,11 +79,17 @@ export class PhotographersController {
   }
 
   @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post('event')
   @UsePipes(ValidationPipe)
-  async createEvent(@Body() createEvent: EventDto, @Res() res: Response) {
+  async createEvent(
+    @Body() createEvent: EventDto,
+    @Res() res: Response,
+    @Headers('authorization') authorization: string,
+  ) {
     const serviceResponse = await this.photographersService.createEvet(
       createEvent,
+      authorization,
     );
 
     const { statusCode } = serviceResponse;

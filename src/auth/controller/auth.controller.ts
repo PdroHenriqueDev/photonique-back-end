@@ -31,12 +31,12 @@ export class AuthController {
   }
 
   @Get('verify-token')
-  verifyToken(
+  async verifyToken(
     @Headers('authorization') authorization: string,
     @Res() res: Response,
   ) {
     const [, token] = authorization?.length > 0 ? authorization.split(' ') : '';
-    const serviceResponse = this.authService.verifyToken(token);
+    const serviceResponse = await this.authService.verifyToken(token);
     const { statusCode, data } = serviceResponse;
 
     return res.status(statusCode).json(data);

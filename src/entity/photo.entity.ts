@@ -5,7 +5,7 @@ import {
   ManyToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
-import { Photographers } from './photographer.entity';
+import { People } from './people.entity';
 
 @Entity()
 export class Photos {
@@ -39,7 +39,7 @@ export class Photos {
 
   created_on: Date;
 
-  @ManyToOne(() => Photographers)
+  @ManyToOne(() => People)
   @JoinColumn({ name: 'photographer_id', referencedColumnName: 'id' })
   photographer_id: string;
 }

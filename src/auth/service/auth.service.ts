@@ -1,28 +1,29 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Photographers } from 'src/entity';
+import { People } from 'src/entity';
 import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto';
 import { Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
 import { AuthResponse } from 'src/interface/AuthResponse';
 import { StandardResponse } from 'src/interface/StandartResponse';
+import { RoleEnum } from 'src/enum/role.enum';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(Photographers)
-    private readonly photographerRepository: Repository<Photographers>,
+    @InjectRepository(People)
+    private readonly photographerRepository: Repository<People>,
     private jwtService: JwtService,
   ) {}
 
   async validatePhotographer(
     authPhotographerDto: AuthPhotographerDto,
-  ): Promise<Photographers | null> {
+  ): Promise<People | null> {
     const { email, password } = authPhotographerDto;
 
     const photographer = await this.photographerRepository.findOne({
-      where: { email },
+      where: { email, role_id: RoleEnum.Photographer },
     });
 
     if (!photographer) return null;
@@ -46,9 +47,14 @@ export class AuthService {
       };
     }
 
-    const { token } = await this.generateToken(authPhotographerDto);
+    const { id, name, email } = photographer;
 
-    const { name, email } = photographer;
+    const photographerToGenerateToken = {
+      id,
+      email,
+    };
+
+    const { token } = await this.generateToken(photographerToGenerateToken);
 
     const user = {
       name,
@@ -65,13 +71,16 @@ export class AuthService {
     };
   }
 
-  async generateToken(authPhotographerDto: AuthPhotographerDto) {
+  async generateToken(photographerToGenerateToken: {
+    id: number;
+    email: string;
+  }) {
     return {
-      token: this.jwtService.sign(authPhotographerDto),
+      token: this.jwtService.sign(photographerToGenerateToken),
     };
   }
 
-  verifyToken(token: string): StandardResponse<string> {
+  async verifyToken(token: string): Promise<StandardResponse<string>> {
     if (!token) {
       return {
         statusCode: 401,
@@ -81,7 +90,7 @@ export class AuthService {
     }
 
     try {
-      this.jwtService.verify(token);
+      await this.jwtService.verify(token);
       return {
         statusCode: 200,
         message: 'Seja bem-vindo',
@@ -94,5 +103,21 @@ export class AuthService {
         data: 'Token inválido',
       };
     }
+  }
+
+  decodeToken(token: string) {
+    const decodedToken = this.jwtService.decode(token);
+
+    return decodedToken;
+  }
+
+  async findPersonById(id: number) {
+    const personsExists = await this.photographerRepository.findOne({
+      where: { id },
+    });
+
+    if (!personsExists) return false;
+
+    return true;
   }
 }

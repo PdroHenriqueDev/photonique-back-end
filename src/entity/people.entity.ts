@@ -1,8 +1,15 @@
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  Column,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Roles } from './roles.entity';
 
 @Entity()
-export class Photographers {
+export class People {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -52,7 +59,11 @@ export class Photographers {
   @Column()
   address_complement: string;
 
-  constructor(partial: Partial<Photographers>) {
+  @ManyToOne(() => Roles, (roles) => roles.id)
+  @JoinColumn({ name: 'role_id', referencedColumnName: 'id' })
+  role_id: number;
+
+  constructor(partial: Partial<People>) {
     Object.assign(this, partial);
   }
 }

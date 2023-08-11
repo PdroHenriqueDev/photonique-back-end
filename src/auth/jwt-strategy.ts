@@ -1,12 +1,11 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { ExtractJwt, Strategy } from 'passport-jwt';
-import { AuthPhotographerDto } from 'src/photographers/DTO/authPhotographer.dto';
 import { AuthService } from './service/auth.service';
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
-  constructor(private authService: AuthService) {
+  constructor(private readonly authService: AuthService) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
       ignoreExpiration: false,
@@ -14,13 +13,14 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     });
   }
 
-  async validate(authPhotographer: AuthPhotographerDto) {
-    const photographer = await this.authService.validatePhotographer(
-      authPhotographer,
-    );
-    if (!photographer) {
+  async validate(tokenInfo: { id: number; email: string }) {
+    const { id } = tokenInfo;
+
+    const photographerExists = await this.authService.findPersonById(id);
+
+    if (!photographerExists) {
       throw new UnauthorizedException();
     }
-    return photographer;
+    return photographerExists;
   }
 }
